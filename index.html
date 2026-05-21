@@ -81,7 +81,6 @@
         </div>
         <div class="text-center mb-6">
             <h2 class="text-lg font-bold text-gray-800 tracking-tight">ยินดีต้อนรับ 👋</h2>
-            <p class="text-xs text-gray-400 mt-1">Showroom Finder V4 — กรุณาเข้าสู่ระบบ</p>
         </div>
         <div class="space-y-3">
             <input type="text" id="usernameInput" class="login-input" placeholder="ชื่อผู้ใช้ (Username)" autocomplete="username">
@@ -100,7 +99,6 @@
     <aside class="w-full md:w-72 p-6 flex flex-col border-r border-gray-50 overflow-y-auto z-10 bg-white flex-shrink-0">
         <div class="mb-8">
             <h1 class="text-xl font-bold text-gray-800 tracking-tight">Showroom <span class="text-indigo-600">Finder V4</span></h1>
-            <p class="text-xs text-gray-400 mt-1">Google Maps Edition</p>
         </div>
         <div class="space-y-6">
             <!-- ค้นหาสถานที่จริง (Google Places SearchBox) -->
@@ -117,7 +115,7 @@
             <!-- ค้นหาโชว์รูมในฐานข้อมูล (hidden — ยังใช้ใน JS) -->
             <input type="text" id="searchInput" style="display:none;">
             <div>
-                <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">เลือกแบรนด์รถยนต์</label>
+                <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 block">เลือกแบรนด์ที่ต้องการ</label>
                 <div class="grid grid-cols-2 gap-3" id="brandFilters">
                     <div class="brand-card active p-3 rounded-2xl flex flex-col items-center justify-center cursor-pointer" onclick="selectBrand(this,'All')">
                         <div class="w-8 h-8 mb-1 flex items-center justify-center text-lg">🚕</div>
