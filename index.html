@@ -40,7 +40,8 @@
         .brand-card.active { border-color:#6366f1; background:#f5f3ff; }
         .brand-card:hover:not(.active) { background:#f9fafb; border-color:#d1d5db; }
         .marquee-container { width:100%; overflow:hidden; white-space:nowrap; }
-        .marquee { display:inline-block; animation:marquee 30s linear infinite; }
+        /* ปรับความเร็วแถบเลื่อนตรงนี้ (50s คือวิ่งช้าลง) */
+        .marquee { display:inline-block; animation:marquee 50s linear infinite; }
         @keyframes marquee { 0%{transform:translateX(100%)} 100%{transform:translateX(-100%)} }
         .nearby-card { transition:box-shadow 0.2s,transform 0.2s; }
         .nearby-card:hover { box-shadow:0 8px 20px rgba(0,0,0,0.08); transform:translateY(-2px); }
@@ -167,8 +168,9 @@
                 <span class="text-sm font-semibold text-gray-500 whitespace-nowrap">🚘 Car News :</span>
             </div>
             <div class="flex-1 px-2 marquee-container">
-                <div class="text-sm font-medium text-indigo-600 marquee">
-                    อัปเดต: Tesla เปิดตัวรุ่นใหม่ล่าสุดพร้อมฟีเจอร์ AI | BMW เตรียมเผยโฉมรถยนต์ไฟฟ้าซีดานหรู | Ford ประกาศยอดขายกระบะอันดับหนึ่ง! | AVATR เปิดตัวโชว์รูมใหม่ในกรุงเทพฯ | Deepal ขยายสาขาทั่วประเทศไทย
+                <!-- แก้ไขแถบเลื่อน ใส่ id="newsMarquee" ให้ AI วิ่งลงตรงนี้ -->
+                <div class="text-sm font-medium text-indigo-600 marquee" id="newsMarquee">
+                    ⏳ กำลังให้ AI สรุปข่าวสารยานยนต์ล่าสุด...
                 </div>
             </div>
             <div class="flex items-center gap-2 pl-3 border-l border-gray-200 flex-shrink-0">
@@ -901,6 +903,49 @@ function showNearbyPlaces(item) {
     }, 8000);
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQd8K5aaM0V9ph55_d5FMKj0od2OCHOzI&libraries=places&callback=initMap"></script>
+
+<!-- ===== เริ่มต้นจุดที่ 3 โค้ด AI ===== -->
+<script>
+async function fetchAICarNews() {
+    // 🛑 อย่าลืมใส่ API Key ของ OpenRouter ตรงนี้นะครับ
+    const apiKey = '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'; 
+    
+    const prompt = "ขอข่าวสารวงการรถยนต์อัปเดตล่าสุดที่เกี่ยวข้องในไทยของวันนี้แบบสั้น ๆ กระชับ 3 ข่าว คั่นแต่ละข่าวด้วยเครื่องหมาย | เป็นภาษาไทย (ขอเฉพาะเนื้อหาข่าว ไม่ต้องมีคำขึ้นต้นหรือลงท้าย และไม่ต้องมีหัวข้อ)";
+    const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
+
+    const requestBody = {
+        "model": "google/gemma-2-9b-it:free", 
+        "messages": [{ "role": "user", "content": prompt }]
+    };
+
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+                'HTTP-Referer': window.location.href, 
+                'X-Title': 'Showroom Finder'
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+        let aiNewsText = data.choices[0].message.content.trim();
+        aiNewsText = aiNewsText.replace(/(\r\n|\n|\r)/gm, " ");
+
+        document.getElementById('newsMarquee').innerText = `✨ AI อัปเดตข่าวรถยนต์: ${aiNewsText}`;
+        
+    } catch (error) {
+        console.error("Error fetching AI news:", error);
+        document.getElementById('newsMarquee').innerText = "⌛ ไม่สามารถเชื่อมต่อกับระบบ AI ได้ในขณะนี้...";
+    }
+}
+document.addEventListener('DOMContentLoaded', fetchAICarNews);
+</script>
+<!-- ===== สิ้นสุดจุดที่ 3 โค้ด AI ===== -->
 
 </body>
 </html>
