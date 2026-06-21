@@ -904,17 +904,17 @@ function showNearbyPlaces(item) {
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQd8K5aaM0V9ph55_d5FMKj0od2OCHOzI&libraries=places&callback=initMap"></script>
 
-<!-- ===== เริ่มต้นจุดที่ 3 โค้ด AI ===== -->
+<!-- ===== เริ่มต้นจุดที่ 3 โค้ด AI (แก้ไขใหม่) ===== -->
 <script>
 async function fetchAICarNews() {
-    // 🛑 อย่าลืมใส่ API Key ของ OpenRouter ตรงนี้นะครับ
     const apiKey = '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'; 
     
     const prompt = "ขอข่าวสารวงการรถยนต์อัปเดตล่าสุดที่เกี่ยวข้องในไทยของวันนี้แบบสั้น ๆ กระชับ 3 ข่าว คั่นแต่ละข่าวด้วยเครื่องหมาย | เป็นภาษาไทย (ขอเฉพาะเนื้อหาข่าว ไม่ต้องมีคำขึ้นต้นหรือลงท้าย และไม่ต้องมีหัวข้อ)";
     const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
     const requestBody = {
-        "model": "google/gemma-2-9b-it:free", 
+        // เปลี่ยนมาใช้โมเดล Llama 3 ซึ่งเสถียรและรองรับภาษาไทยได้ดีมาก (ฟรี)
+        "model": "meta-llama/llama-3-8b-instruct:free", 
         "messages": [{ "role": "user", "content": prompt }]
     };
 
@@ -924,13 +924,18 @@ async function fetchAICarNews() {
             headers: { 
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json',
-                'HTTP-Referer': window.location.href, 
+                // แก้ไขจุดนี้: ฟิกซ์ URL สมมติลงไป เพื่อให้รันไฟล์ HTML ในเครื่องคอมพิวเตอร์ได้
+                'HTTP-Referer': 'https://my-showroom-app.local', 
                 'X-Title': 'Showroom Finder'
             },
             body: JSON.stringify(requestBody)
         });
 
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        // ถ้า API คืนค่า Error กลับมา ให้ดึงข้อความ Error ออกมาแสดง
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error?.message || `HTTP Status ${response.status}`);
+        }
 
         const data = await response.json();
         let aiNewsText = data.choices[0].message.content.trim();
@@ -940,7 +945,8 @@ async function fetchAICarNews() {
         
     } catch (error) {
         console.error("Error fetching AI news:", error);
-        document.getElementById('newsMarquee').innerText = "⌛ ไม่สามารถเชื่อมต่อกับระบบ AI ได้ในขณะนี้...";
+        // แสดง Error ออกหน้าเว็บเลย จะได้รู้ว่าติดปัญหาอะไร
+        document.getElementById('newsMarquee').innerText = `❌ ไม่สามารถโหลดข่าวได้: ${error.message}`;
     }
 }
 document.addEventListener('DOMContentLoaded', fetchAICarNews);
