@@ -907,14 +907,13 @@ function showNearbyPlaces(item) {
 <!-- ===== เริ่มต้นจุดที่ 3 โค้ด AI (แก้ไขใหม่) ===== -->
 <script>
 async function fetchAICarNews() {
-    const apiKey = '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'; 
+    const apiKey = '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'; 
     
     const prompt = "ขอข่าวสารวงการรถยนต์อัปเดตล่าสุดที่เกี่ยวข้องในไทยของวันนี้แบบสั้น ๆ กระชับ 3 ข่าว คั่นแต่ละข่าวด้วยเครื่องหมาย | เป็นภาษาไทย (ขอเฉพาะเนื้อหาข่าว ไม่ต้องมีคำขึ้นต้นหรือลงท้าย และไม่ต้องมีหัวข้อ)";
     const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
     const requestBody = {
-        // เปลี่ยนมาใช้โมเดล Llama 3 ซึ่งเสถียรและรองรับภาษาไทยได้ดีมาก (ฟรี)
-        "model": "meta-llama/llama-3-8b-instruct:free", 
+        "model": "openai/gpt-oss-120b:free", // <--- เอา Model ID มาแปะตรงนี้เลยครับ
         "messages": [{ "role": "user", "content": prompt }]
     };
 
