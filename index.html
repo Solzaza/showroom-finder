@@ -907,13 +907,16 @@ function showNearbyPlaces(item) {
 <!-- ===== เริ่มต้นจุดที่ 3 โค้ด AI (แก้ไขใหม่) ===== -->
 <script>
 async function fetchAICarNews() {
-    const apiKey = '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'; 
+    // 🛑 จุดที่ 1: ต้องไปสร้าง API Key อันใหม่เอี่ยมมาใส่ตรงนี้ครับ
+    // (เพราะอันที่คุณเพิ่งส่งมาในแชทเมื่อกี้ มันโดนระบบของ OpenRouter บล็อกทิ้งไปเรียบร้อยแล้วครับ 😅)
+    const apiKey = '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'; 
     
     const prompt = "ขอข่าวสารวงการรถยนต์อัปเดตล่าสุดที่เกี่ยวข้องในไทยของวันนี้แบบสั้น ๆ กระชับ 3 ข่าว คั่นแต่ละข่าวด้วยเครื่องหมาย | เป็นภาษาไทย (ขอเฉพาะเนื้อหาข่าว ไม่ต้องมีคำขึ้นต้นหรือลงท้าย และไม่ต้องมีหัวข้อ)";
     const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
     const requestBody = {
-        "model": "openai/gpt-oss-120b:free", // <--- เอา Model ID มาแปะตรงนี้เลยครับ
+        // ✅ จุดที่ 2: เปลี่ยนชื่อ Model เป็น Llama 3.2 3B ตัวที่คุณเลือกไว้ครับ
+        "model": "meta-llama/llama-3.2-3b-instruct:free", 
         "messages": [{ "role": "user", "content": prompt }]
     };
 
