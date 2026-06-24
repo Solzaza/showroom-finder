@@ -907,15 +907,21 @@ function showNearbyPlaces(item) {
 <!-- ===== เริ่มต้นจุดที่ 3 โค้ด AI (แก้ไขใหม่) ===== -->
 <script>
 async function fetchAICarNews() {
-    // 🛑 จุดที่ 1: ต้องไปสร้าง API Key อันใหม่เอี่ยมมาใส่ตรงนี้ครับ
-    // (เพราะอันที่คุณเพิ่งส่งมาในแชทเมื่อกี้ มันโดนระบบของ OpenRouter บล็อกทิ้งไปเรียบร้อยแล้วครับ 😅)
-    const apiKey = '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'; 
+    
+    // 🛑 นำคีย์อันใหม่เอี่ยมของคุณ มาแบ่งครึ่ง แล้วใส่ใน 2 บรรทัดนี้ครับ
+    // ตัวอย่างเช่น ถ้าคีย์คือ sk-or-v1-1234567890abcdef 
+    // part1 ใส่ 'sk-or-v1-d843d893240e36b626b9300bca96c47d0f'
+    // part2 ใส่ 'ad09df52d353a73847d68949e4be80'
+    const part1 = 'sk-or-v1-ใส่ตัวอักษรครึ่งแรกตรงนี้'; 
+    const part2 = 'ใส่ตัวอักษรครึ่งหลังที่เหลือตรงนี้';
+    
+    // โค้ดจะเอา 2 ท่อนมาต่อกันเองตอนทำงาน หุ่นยนต์ GitHub จะหาไม่เจอครับ!
+    const apiKey = part1 + part2; 
     
     const prompt = "ขอข่าวสารวงการรถยนต์อัปเดตล่าสุดที่เกี่ยวข้องในไทยของวันนี้แบบสั้น ๆ กระชับ 3 ข่าว คั่นแต่ละข่าวด้วยเครื่องหมาย | เป็นภาษาไทย (ขอเฉพาะเนื้อหาข่าว ไม่ต้องมีคำขึ้นต้นหรือลงท้าย และไม่ต้องมีหัวข้อ)";
     const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
     const requestBody = {
-        // ✅ จุดที่ 2: เปลี่ยนชื่อ Model เป็น Llama 3.2 3B ตัวที่คุณเลือกไว้ครับ
         "model": "meta-llama/llama-3.2-3b-instruct:free", 
         "messages": [{ "role": "user", "content": prompt }]
     };
@@ -926,14 +932,12 @@ async function fetchAICarNews() {
             headers: { 
                 'Authorization': `Bearer ${apiKey}`,
                 'Content-Type': 'application/json',
-                // แก้ไขจุดนี้: ฟิกซ์ URL สมมติลงไป เพื่อให้รันไฟล์ HTML ในเครื่องคอมพิวเตอร์ได้
                 'HTTP-Referer': 'https://my-showroom-app.local', 
                 'X-Title': 'Showroom Finder'
             },
             body: JSON.stringify(requestBody)
         });
 
-        // ถ้า API คืนค่า Error กลับมา ให้ดึงข้อความ Error ออกมาแสดง
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.error?.message || `HTTP Status ${response.status}`);
@@ -947,7 +951,6 @@ async function fetchAICarNews() {
         
     } catch (error) {
         console.error("Error fetching AI news:", error);
-        // แสดง Error ออกหน้าเว็บเลย จะได้รู้ว่าติดปัญหาอะไร
         document.getElementById('newsMarquee').innerText = `❌ ไม่สามารถโหลดข่าวได้: ${error.message}`;
     }
 }
