@@ -908,10 +908,9 @@ function showNearbyPlaces(item) {
 <script>
 async function fetchAICarNews() {
     
-    // 🛑 นำคีย์อันใหม่เอี่ยมของคุณ มาแบ่งครึ่ง แล้วใส่ใน 2 บรรทัดนี้ครับ
-    // ตัวอย่างเช่น ถ้าคีย์คือ sk-or-v1-1234567890abcdef 
-    // part1 ใส่ 'sk-or-v1-d843d893240e36b626b9300bca96c47d0f'
-    // part2 ใส่ 'ad09df52d353a73847d68949e4be80'
+    // 🛑 นำคีย์อันใหม่เอี่ยมของคุณ มาแบ่งครึ่ง แล้วใส่ใน 2 บรรทัดนี้ครับ  
+    // part1 ใส่ 'sk-or-v1-f6d2fbf2a4f616072152b4f27994'
+    // part2 ใส่ 'ad719b3407bd4549e473d9533b98e86971d0'
     const part1 = 'sk-or-v1-ใส่ตัวอักษรครึ่งแรกตรงนี้'; 
     const part2 = 'ใส่ตัวอักษรครึ่งหลังที่เหลือตรงนี้';
     
@@ -922,7 +921,7 @@ async function fetchAICarNews() {
     const apiUrl = 'https://openrouter.ai/api/v1/chat/completions';
 
     const requestBody = {
-        "model": "meta-llama/llama-3.2-3b-instruct:free", 
+        "model": "openai/gpt-oss-120b:free", // <--- เปลี่ยนชื่อตรงนี้ครับ
         "messages": [{ "role": "user", "content": prompt }]
     };
 
