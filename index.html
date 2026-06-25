@@ -953,7 +953,15 @@ async function fetchAICarNews() {
         document.getElementById('newsMarquee').innerText = `❌ ไม่สามารถโหลดข่าวได้: ${error.message}`;
     }
 }
-document.addEventListener('DOMContentLoaded', fetchAICarNews);
+// โหลดข่าวครั้งแรกทันทีที่เปิดเว็บ
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAICarNews();
+
+    // ⏱️ ตั้งเวลาให้อัปเดตข่าวใหม่แบบ Auto ทุก ๆ 10 นาที (600,000 มิลลิวินาที)
+    // สาเหตุที่ตั้ง 10 นาที เพื่อป้องกันไม่ให้ OpenRouter บล็อกเราข้อหาดึงข้อมูลถี่เกินไป (Spam) ครับ
+    setInterval(fetchAICarNews, 600000); 
+});
+    
 </script>
 <!-- ===== สิ้นสุดจุดที่ 3 โค้ด AI ===== -->
 <!-- ===== DONATE BUTTON & MINIMAL POPUP ===== -->
